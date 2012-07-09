@@ -1,74 +1,38 @@
 package com.dc.android.safeware;
 
 import android.app.ActionBar;
+import android.app.ActionBar.Tab;
+import android.app.Activity;
 import android.app.FragmentTransaction;
-import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.NavUtils;
-import android.support.v4.view.ViewPager;
-import android.view.Gravity;
-import android.view.LayoutInflater;
+import android.util.Log;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
-public class MainActivity extends FragmentActivity implements ActionBar.TabListener {
+public class MainActivity extends Activity implements ActionBar.TabListener {
+
+    private static final String KEY_FIRST_RUN = "FIRST_RUN";
+    private static final String SAFE_PASSWORD = "SAFE_PASSWORD";
 
     /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide fragments for each of the
-     * sections. We use a {@link android.support.v4.app.FragmentPagerAdapter} derivative, which will
-     * keep every loaded fragment in memory. If this becomes too memory intensive, it may be best
-     * to switch to a {@link android.support.v4.app.FragmentStatePagerAdapter}.
+     * 使用PF来记录程序启动次数
      */
-    SectionsPagerAdapter mSectionsPagerAdapter;
-
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
-    ViewPager mViewPager;
-
+    SharedPreferences preferences;
+    
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        // Create the adapter that will return a fragment for each of the three primary sections
-        // of the app.
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-
-        // Set up the action bar.
+        /*
         final ActionBar actionBar = getActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-
-        // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.pager);
-        mViewPager.setAdapter(mSectionsPagerAdapter);
-
-        // When swiping between different sections, select the corresponding tab.
-        // We can also use ActionBar.Tab#select() to do this if we have a reference to the
-        // Tab.
-        mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
-            @Override
-            public void onPageSelected(int position) {
-                actionBar.setSelectedNavigationItem(position);
-            }
-        });
-
-        // For each of the sections in the app, add a tab to the action bar.
-        for (int i = 0; i < mSectionsPagerAdapter.getCount(); i++) {
-            // Create a tab with text corresponding to the page title defined by the adapter.
-            // Also specify this Activity object, which implements the TabListener interface, as the
-            // listener for when this tab is selected.
-            actionBar.addTab(
-                    actionBar.newTab()
-                            .setText(mSectionsPagerAdapter.getPageTitle(i))
-                            .setTabListener(this));
-        }
+        */
+        init();
     }
 
     @Override
@@ -77,74 +41,117 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         return true;
     }
 
-    
-
     @Override
-    public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+    public void onTabSelected(Tab tab, FragmentTransaction ft) {
+        
     }
 
     @Override
-    public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-        // When the given tab is selected, switch to the corresponding page in the ViewPager.
-        mViewPager.setCurrentItem(tab.getPosition());
+    public void onTabUnselected(Tab tab, FragmentTransaction ft) {
+        
     }
 
     @Override
-    public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+    public void onTabReselected(Tab tab, FragmentTransaction ft) {
+        
     }
-
     /**
-     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to one of the primary
-     * sections of the app.
+     * 提交按钮触发
+     * @param view
      */
-    public class SectionsPagerAdapter extends FragmentPagerAdapter {
-
-        public SectionsPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int i) {
-            Fragment fragment = new DummySectionFragment();
-            Bundle args = new Bundle();
-            args.putInt(DummySectionFragment.ARG_SECTION_NUMBER, i + 1);
-            fragment.setArguments(args);
-            return fragment;
-        }
-
-        @Override
-        public int getCount() {
-            return 3;
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            switch (position) {
-                case 0: return getString(R.string.title_section1).toUpperCase();
-                case 1: return getString(R.string.title_section2).toUpperCase();
-                case 2: return getString(R.string.title_section3).toUpperCase();
+    public void setSafePassword(View view){
+        if(isFirstStart()){
+            //第一次运行的情况下才保存以后设置的安全密码
+            Editor editor = preferences.edit();
+            editor.putString(SAFE_PASSWORD, ((TextView)findViewById(R.id.pwd1)).getText().toString());
+            editor.commit();
+        }else{
+            //第N次运行的情况下必须要求输入相同的安全密码
+            String pwd = ((TextView)findViewById(R.id.pwd1)).getText().toString();
+            String pwd0 = ((TextView)findViewById(R.id.pwd0)).getText().toString();
+            if(pwd0 == null || !pwd0.equals(pwd)){
+                System.out.println("安全密码错误");
             }
-            return null;
         }
     }
-
     /**
-     * A dummy fragment representing a section of the app, but that simply displays dummy text.
+     * 重置按钮触发
+     * @param view
      */
-    public static class DummySectionFragment extends Fragment {
-        public DummySectionFragment() {
+    public void resetPassword(View view){
+        
+    }
+    
+    /**
+     * 初始化页面
+     */
+    public void init(){
+        Editor editor = preferences.edit();
+        int count = startCount();
+        //第一次使用
+        if(isFirstStart()){
+            firstStart();
+            //editor.putString(SAFE_PASSWORD, ((TextView)findViewById(R.id.pwd1)).getText().toString());
+        }else{
+            notFirstStart();
+            String pwd = preferences.getString(SAFE_PASSWORD, "");
+            System.out.println(pwd);
         }
-
-        public static final String ARG_SECTION_NUMBER = "section_number";
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
-            TextView textView = new TextView(getActivity());
-            textView.setGravity(Gravity.CENTER);
-            Bundle args = getArguments();
-            textView.setText(Integer.toString(args.getInt(ARG_SECTION_NUMBER)));
-            return textView;
+        //存入启动次数
+        editor.putInt(KEY_FIRST_RUN, ++count);
+        //提交修改
+        editor.commit();
+    }
+    /**
+     * 第一次启动程序，将一些数据隐藏
+     */
+    public void firstStart(){
+        TextView viewPwd0 = (TextView) findViewById(R.id.view_pwd0);
+        EditText textPwd0 = (EditText) findViewById(R.id.pwd0);
+        TextView viewErrorPwd0 = (TextView) findViewById(R.id.view_error_pwd0);
+        //隐藏控件，并且不占用空间
+        viewPwd0.setVisibility(View.GONE);
+        textPwd0.setVisibility(View.GONE);
+        viewErrorPwd0.setVisibility(View.GONE);
+        
+        
+    }
+    /**
+     * 非第一次启动程序，将一些数据隐藏
+     */
+    public void notFirstStart(){
+        TextView viewFirstPsw = (TextView) findViewById(R.id.view_first_psw);
+        EditText textPwd1 = (EditText) findViewById(R.id.pwd1);
+        EditText testPwd2 = (EditText) findViewById(R.id.pwd2);
+        TextView viewPwdDiffrent = (TextView) findViewById(R.id.view_pwd_diffrent);
+        Button resetButton = (Button) findViewById(R.id.reset);
+        
+        viewFirstPsw.setVisibility(View.GONE);
+        textPwd1.setVisibility(View.GONE);
+        testPwd2.setVisibility(View.GONE);
+        viewPwdDiffrent.setVisibility(View.GONE);
+        resetButton.setVisibility(View.GONE);
+    }
+    /**
+     * 判断是否第一次启动程序
+     * @return
+     */
+    public boolean isFirstStart(){
+        boolean bool = false;
+        int count = startCount();
+        if(count == 0){
+            bool = true;
         }
+        return bool;
+    }
+    /**
+     * 启动次数
+     * @return
+     */
+    public int startCount(){
+        //读取PF中需要的数据
+        preferences = getSharedPreferences(KEY_FIRST_RUN, MODE_WORLD_READABLE);
+        int count = preferences.getInt(KEY_FIRST_RUN, 0);
+        return count;
     }
 }

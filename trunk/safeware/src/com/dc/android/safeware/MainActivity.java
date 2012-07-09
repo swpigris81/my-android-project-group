@@ -86,6 +86,8 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
      * 初始化页面
      */
     public void init(){
+        //读取PF中需要的数据
+        preferences = getSharedPreferences(KEY_FIRST_RUN, MODE_WORLD_READABLE);
         Editor editor = preferences.edit();
         int count = startCount();
         //第一次使用
@@ -149,8 +151,6 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
      * @return
      */
     public int startCount(){
-        //读取PF中需要的数据
-        preferences = getSharedPreferences(KEY_FIRST_RUN, MODE_WORLD_READABLE);
         int count = preferences.getInt(KEY_FIRST_RUN, 0);
         return count;
     }

@@ -18,7 +18,10 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 
     private static final String KEY_FIRST_RUN = "FIRST_RUN";
     private static final String SAFE_PASSWORD = "SAFE_PASSWORD";
-
+    /**
+     * 是否第一次启动
+     */
+    private static boolean firstStart = false;
     /**
      * 使用PF来记录程序启动次数
      */
@@ -60,7 +63,7 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
      * @param view
      */
     public void setSafePassword(View view){
-        if(isFirstStart()){
+        if(firstStart){
             //第一次运行的情况下才保存以后设置的安全密码
             Editor editor = preferences.edit();
             editor.putString(SAFE_PASSWORD, ((TextView)findViewById(R.id.pwd1)).getText().toString());
@@ -90,8 +93,9 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
         preferences = getSharedPreferences(KEY_FIRST_RUN, MODE_WORLD_READABLE);
         Editor editor = preferences.edit();
         int count = startCount();
+        isFirstStart();
         //第一次使用
-        if(isFirstStart()){
+        if(firstStart){
             firstStart();
             //editor.putString(SAFE_PASSWORD, ((TextView)findViewById(R.id.pwd1)).getText().toString());
         }else{
@@ -138,13 +142,11 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
      * 判断是否第一次启动程序
      * @return
      */
-    public boolean isFirstStart(){
-        boolean bool = false;
+    public void isFirstStart(){
         int count = startCount();
         if(count == 0){
-            bool = true;
+            firstStart = true;
         }
-        return bool;
     }
     /**
      * 启动次数

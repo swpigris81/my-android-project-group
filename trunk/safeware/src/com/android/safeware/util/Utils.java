@@ -22,6 +22,7 @@ public class Utils {
         AlertDialog ad = adb.create();
         //按对话框以外的地方不起作用。按返回键还起作用
         ad.setCanceledOnTouchOutside(false);
+        
         //按对话框以外的地方不起作用。按返回键也不起作用
         //setCanceleable(false);
         //设置对话框标题

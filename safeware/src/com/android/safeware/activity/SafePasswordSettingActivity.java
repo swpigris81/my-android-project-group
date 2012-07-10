@@ -16,7 +16,7 @@ public class SafePasswordSettingActivity extends Activity {
     /**
      * 日志目标
      */
-    private static final String LOG_TAG = "MainActivity";
+    private static final String LOG_TAG = "SafePasswordSettingActivity";
     /**
      * 创建的数据文件名
      */
@@ -58,7 +58,7 @@ public class SafePasswordSettingActivity extends Activity {
      * 加载菜单
      */
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.password_setting, menu);
+        getMenuInflater().inflate(R.menu.safe_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
 

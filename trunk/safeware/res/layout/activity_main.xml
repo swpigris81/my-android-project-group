@@ -37,7 +37,11 @@
         android:layout_height="wrap_content"
         android:inputType="textPassword"
         android:textSize="18sp" />
-
+	<TextView
+        android:id="@+id/view_sec_psw"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/sec_psw" />
     <EditText
         android:id="@+id/pwd2"
         android:layout_width="wrap_content"
@@ -73,5 +77,5 @@
             android:text="@string/reset_button" />
 
     </LinearLayout>
-
+	
 </TableLayout>

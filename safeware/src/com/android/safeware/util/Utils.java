@@ -1,8 +1,10 @@
 package com.android.safeware.util;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 
 public class Utils {
     /**
@@ -11,56 +13,60 @@ public class Utils {
      * @param title 标题
      * @param titleId
      * @param message 消息
-     * @param msgId
      * @param yesBtn YES按钮
-     * @param yesBtnId
      * @param noBtn NO按钮
-     * @param noBtnId
      */
-    public static void openOptionsDialog(Context context, final String title, int titleId, String message, int msgId, String yesBtn, int yesBtnId, String noBtn, int noBtnId){
+    public static void openOptionsDialog(final Context context, final Class clazz, String title, int titleId, String message, String yesBtn, String noBtn){
         AlertDialog.Builder adb=new AlertDialog.Builder(context);
         AlertDialog ad = adb.create();
         //按对话框以外的地方不起作用。按返回键还起作用
         ad.setCanceledOnTouchOutside(false);
-        
         //按对话框以外的地方不起作用。按返回键也不起作用
         //setCanceleable(false);
         //设置对话框标题
         if(title != null && !"".equals(title)){
-            adb.setTitle(title);
+        	ad.setTitle(title);
         }else{
-            adb.setTitle(titleId);
+        	ad.setTitle(titleId);
         }
         //给对话框设置图标
         //ad.setIcon(null);
         //设置对话框的提示信息
         if(message != null && !"".equals(message)){
-            adb.setMessage(message);
+        	ad.setMessage(message);
         }else{
-            adb.setMessage(msgId);
+        	//ad.setMessage(msgId);
         }
         //添加YES按钮
         if(yesBtn != null && !"".equals(yesBtn)){
+        	ad.setButton(DialogInterface.BUTTON_POSITIVE, yesBtn, new DialogInterface.OnClickListener(){
+    
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                	context.startActivity(new Intent (context, clazz) );
+                }
+            });
+        	/*
             adb.setPositiveButton(yesBtn, new DialogInterface.OnClickListener(){
     
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    
+                	context.startActivity(new Intent (context, clazz) );
                 }
-                
             });
-        }else if(yesBtnId != -1){
-            adb.setPositiveButton(yesBtnId, new DialogInterface.OnClickListener(){
-                
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    System.out.println(title);
-                }
-                
-            });
+            */
         }
         //添加NO按钮
         if(noBtn != null && !"".equals(noBtn)){
+        	
+        	ad.setButton(DialogInterface.BUTTON_NEGATIVE, noBtn, new DialogInterface.OnClickListener(){
+        	    
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                	//context.startActivity(new Intent (context, clazz) );
+                }
+            });
+        	/*
             adb.setNegativeButton(noBtn, new DialogInterface.OnClickListener(){
     
                 @Override
@@ -69,17 +75,10 @@ public class Utils {
                 }
                 
             });
-        }else if(noBtnId != -1){
-            adb.setNegativeButton(noBtnId, new DialogInterface.OnClickListener(){
-                
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    
-                }
-                
-            });
+            */
         }
         //显示对话框
-        adb.show();
+        //adb.show();
+        ad.show();
     }
 }

@@ -1,6 +1,9 @@
 package com.android.safeware.activity;
 
+import com.android.safeware.util.Utils;
+
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
@@ -68,13 +71,20 @@ public class SafePasswordSettingActivity extends Activity {
      * @param view
      */
     public void setSafePassword(View view){
+        AlertDialog.Builder dialog=new AlertDialog.Builder(SafePasswordSettingActivity.this);
+        
         if(firstStart || isSetting){
             //第一次运行的情况下才保存以后设置的安全密码
             Editor editor = preferences.edit();
             String safePassword = ((EditText)findViewById(R.id.pwd1)).getText().toString();
             String safePassword2 = ((EditText)findViewById(R.id.pwd2)).getText().toString();
             TextView tv = (TextView) findViewById(R.id.view_pwd_diffrent);
-            if(safePassword == null || !safePassword.equals(safePassword2)){
+            if(safePassword == null || "".equals(safePassword)){
+                tv.setText("安全密码不能为空");
+                tv.setVisibility(View.VISIBLE);
+                Log.i(LOG_TAG, "密码不能为空");
+            }else if(!safePassword.equals(safePassword2)){
+                tv.setText("两次输入的密码不一致");
                 tv.setVisibility(View.VISIBLE);
                 Log.i(LOG_TAG, "两次输入的密码不一致");
             }else{
@@ -84,6 +94,7 @@ public class SafePasswordSettingActivity extends Activity {
                 Log.i(LOG_TAG, "安全密码已经成功设置："+safePassword);
                 //密码设置成功之后，应该将标志设置false
                 isSetting = false;
+                Utils.openOptionsDialog(SafePasswordSettingActivity.this, "提示", -1, "您的安全密码已经成功设置，请注意保存！", -1, "确定", -1, null, -1);
             }
         }else{
             //第N次运行的情况下必须要求输入相同的安全密码
@@ -96,6 +107,8 @@ public class SafePasswordSettingActivity extends Activity {
             }else{
                 tv.setVisibility(View.GONE);
                 Log.i(LOG_TAG, "安全密码正确");
+                //密码设置成功之后，应该将标志设置false
+                isSetting = false;
             }
         }
     }

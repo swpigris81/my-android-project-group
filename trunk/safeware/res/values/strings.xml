@@ -1,7 +1,7 @@
 <resources>
 
     <string name="app_name">安全防盗</string>
-    <string name="title_activity_safe_password_setting">设置安全密码</string>
+    <string name="title_activity_safe_password_setting">安全防盗</string>
 
     <string name="menu_settings">设置安全密码</string>
     <string name="insert_psw">请输入安全密码</string>

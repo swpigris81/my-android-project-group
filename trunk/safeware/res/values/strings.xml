@@ -1,8 +1,16 @@
 <resources>
 
     <string name="app_name">安全防盗</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="menu_settings">Settings</string>
     <string name="title_activity_safe_password_setting">设置安全密码</string>
 
+    <string name="menu_settings">设置安全密码</string>
+    <string name="insert_psw">请输入安全密码</string>
+	<string name="psw_error_reinset">安全密码错误，请重新输入</string>
+    <string name="first_psw">第一次使用请设置安全密码</string>
+    <string name="pwd_diffrent">两次输入的密码不一致</string>
+    <string name="submit_button">提交</string>
+    <string name="reset_button">重置</string>
+    <string name="exit_safeware">退出</string>
+    <string name="sec_psw">请再次输入安全密码</string>
+    
 </resources>

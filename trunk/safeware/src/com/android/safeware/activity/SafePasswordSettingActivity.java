@@ -1,6 +1,7 @@
 package com.android.safeware.activity;
 
-import com.dc.android.safeware.R;
+
+import com.android.safeware.R;
 
 import android.app.Activity;
 import android.content.SharedPreferences;

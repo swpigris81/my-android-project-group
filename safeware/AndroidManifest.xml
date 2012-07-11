@@ -15,8 +15,9 @@
             android:name=".SafePasswordSettingActivity"
             android:label="@string/title_activity_safe_password_setting" >
             <intent-filter>
+                <!-- 决定应用程序最先启动的Activity -->
                 <action android:name="android.intent.action.MAIN" />
-
+                <!-- 决定应用程序是否显示在程序列表里 -->
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -24,9 +25,20 @@
             android:name=".MainActivity"
             android:label="@string/title_activity_main" >
             <intent-filter>
+                <!-- 
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
+                -->
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.android.safeware.common.activity.BaseActivity"
+            android:label="@string/title_activity_menu" >
+            <intent-filter>
+                <!-- 
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+                -->
             </intent-filter>
         </activity>
     </application>

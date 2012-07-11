@@ -3,4 +3,8 @@
         android:title="@string/menu_settings"
         android:orderInCategory="100"
         android:showAsAction="never" />
+    <item android:id="@+id/exit_safeware" 
+        android:title="@string/exit_safeware">
+        <!-- android:onClick="onExitMenuClick" -->
+    </item>
 </menu>

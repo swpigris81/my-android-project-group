@@ -13,5 +13,6 @@
     <string name="sec_psw">请再次输入安全密码</string>
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_main">主界面</string>
+    <string name="title_activity_menu">菜单处理</string>
 
 </resources>

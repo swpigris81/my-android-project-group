@@ -1,37 +1,20 @@
 package com.android.safeware.activity;
 
-import com.android.safeware.util.Utils;
-
-import android.app.Activity;
-import android.app.AlertDialog;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-public class SafePasswordSettingActivity extends Activity {
+import com.android.safeware.common.activity.BaseActivity;
+import com.android.safeware.util.Utils;
 
-    /**
-     * 日志目标
-     */
-    private static final String LOG_TAG = "SafePasswordSettingActivity";
-    /**
-     * 创建的数据文件名
-     */
-    private static final String LOG_FILE_NAME = "SafewareApplication";
-    /**
-     * 程序运行的次数
-     */
-    private static final String KEY_FIRST_RUN = "FIRST_RUN";
-    /**
-     * 用户设置的安全密码
-     */
-    private static final String SAFE_PASSWORD = "SAFE_PASSWORD";
+public class SafePasswordSettingActivity extends BaseActivity {
+
     /**
      * 是否第一次启动
      */
@@ -63,6 +46,10 @@ public class SafePasswordSettingActivity extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.safe_menu, menu);
         return super.onCreateOptionsMenu(menu);
+    }
+    
+    public void onActivityResult(int requestCode, int resultCode, Intent data){
+        //if(SETTING_PASSWORD.equals(r))
     }
 
     
@@ -155,38 +142,6 @@ public class SafePasswordSettingActivity extends Activity {
         //提交修改
         editor.commit();
     }
-    /**
-     * 设置第一部分的控件的可视状态
-     * @param visibility
-     */
-    public void setVisibilityForFirst(int visibility){
-        TextView viewPwd0 = (TextView) findViewById(R.id.view_pwd0);
-        EditText textPwd0 = (EditText) findViewById(R.id.pwd0);
-        //TextView viewErrorPwd0 = (TextView) findViewById(R.id.view_error_pwd0);
-        
-        viewPwd0.setVisibility(visibility);
-        textPwd0.setVisibility(visibility);
-        //viewErrorPwd0.setVisibility(visibility);
-    }
-    /**
-     * 设置第二部分的控件的可视状态
-     * @param visibility
-     */
-    public void setVisibilityForSec(int visibility){
-        TextView viewFirstPsw = (TextView) findViewById(R.id.view_first_psw);
-        TextView viewSecPsw = (TextView) findViewById(R.id.view_sec_psw);
-        EditText textPwd1 = (EditText) findViewById(R.id.pwd1);
-        EditText testPwd2 = (EditText) findViewById(R.id.pwd2);
-        //TextView viewPwdDiffrent = (TextView) findViewById(R.id.view_pwd_diffrent);
-        //Button resetButton = (Button) findViewById(R.id.reset);
-        
-        viewFirstPsw.setVisibility(visibility);
-        viewSecPsw.setVisibility(visibility);
-        textPwd1.setVisibility(visibility);
-        testPwd2.setVisibility(visibility);
-        //viewPwdDiffrent.setVisibility(visibility);
-        //resetButton.setVisibility(View.GONE);
-    }
     
     /**
      * 第一次启动程序，将一些数据隐藏
@@ -221,36 +176,4 @@ public class SafePasswordSettingActivity extends Activity {
         int count = preferences.getInt(KEY_FIRST_RUN, 0);
         return count;
     }
-    /**
-     * 退出按钮响应
-     * @param item
-     */
-    public void onExitMenuClick(MenuItem item){
-        finish();
-    }
-    /**
-     * 设置密码按钮响应
-     * @param item
-     */
-    public void onMenuSettingClick(MenuItem item){
-        setVisibilityForFirst(View.GONE);
-        setVisibilityForSec(View.VISIBLE);
-    }
-    /**
-     * 菜单默认响应方法
-     */
-    public boolean onOptionsItemSelected(MenuItem item){
-        switch(item.getItemId()){
-            case R.id.menu_setting:
-                isSetting = true;
-                onMenuSettingClick(item);
-                return true;
-            case R.id.exit_safeware:
-                onExitMenuClick(item);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-    
 }

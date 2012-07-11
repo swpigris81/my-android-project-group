@@ -71,8 +71,6 @@ public class SafePasswordSettingActivity extends Activity {
      * @param view
      */
     public void setSafePassword(View view){
-        AlertDialog.Builder dialog=new AlertDialog.Builder(SafePasswordSettingActivity.this);
-        
         if(firstStart || isSetting){
             //第一次运行的情况下才保存以后设置的安全密码
             Editor editor = preferences.edit();
@@ -94,7 +92,7 @@ public class SafePasswordSettingActivity extends Activity {
                 Log.i(LOG_TAG, "安全密码已经成功设置："+safePassword);
                 //密码设置成功之后，应该将标志设置false
                 isSetting = false;
-                Utils.openOptionsDialog(SafePasswordSettingActivity. this,MainActivity.class, "提示", -1, "您的安全密码已经成功设置，请注意保存！", "确定", null);
+                Utils.openOptionsDialog(SafePasswordSettingActivity.this, MainActivity.class, "提示", -1, "您的安全密码已经成功设置，请注意保存！", "确定", null);
             }
         }else{
             //第N次运行的情况下必须要求输入相同的安全密码
@@ -109,7 +107,7 @@ public class SafePasswordSettingActivity extends Activity {
                 Log.i(LOG_TAG, "安全密码正确");
                 //密码设置成功之后，应该将标志设置false
                 isSetting = false;
-                Utils.openOptionsDialog(SafePasswordSettingActivity. this,MainActivity.class, "提示", -1, "安全密码正确！", "确定", null);
+                Utils.openOptionsDialog(SafePasswordSettingActivity.this, MainActivity.class, "提示", -1, "安全密码正确！", "确定", null);
             }
         }
     }
